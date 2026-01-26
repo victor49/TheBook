@@ -12,7 +12,7 @@ using Thebook.Models;
 namespace Thebook.Migrations
 {
     [DbContext(typeof(TheBookContext))]
-    [Migration("20260123223139_InitialCreate")]
+    [Migration("20260126202124_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -82,7 +82,7 @@ namespace Thebook.Migrations
 
                     b.HasKey("IdLibro");
 
-                    b.ToTable("libros");
+                    b.ToTable("Libros");
                 });
 
             modelBuilder.Entity("Thebook.Models.Prestamo", b =>

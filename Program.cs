@@ -19,10 +19,12 @@ builder.Services.AddDbContext<TheBookContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("MiConexion")));
 
 //Inyeccion de dependencias
-builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEmpeadoRepository, EmpleadoRepository>();
 builder.Services.AddScoped<IEmpleadoService, EmpleadoService>();
+builder.Services.AddScoped<ILibroRepository, LibroRepository>();
+builder.Services.AddScoped<ILibroService, LibroService>();
 
 //jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

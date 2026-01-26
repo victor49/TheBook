@@ -79,7 +79,7 @@ namespace Thebook.Migrations
 
                     b.HasKey("IdLibro");
 
-                    b.ToTable("libros");
+                    b.ToTable("Libros");
                 });
 
             modelBuilder.Entity("Thebook.Models.Prestamo", b =>

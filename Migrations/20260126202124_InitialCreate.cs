@@ -28,7 +28,7 @@ namespace Thebook.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "libros",
+                name: "Libros",
                 columns: table => new
                 {
                     IdLibro = table.Column<int>(type: "integer", nullable: false)
@@ -41,7 +41,7 @@ namespace Thebook.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_libros", x => x.IdLibro);
+                    table.PrimaryKey("PK_Libros", x => x.IdLibro);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,16 +79,16 @@ namespace Thebook.Migrations
                 {
                     table.PrimaryKey("PK_Prestamos", x => x.IdPrestamo);
                     table.ForeignKey(
+                        name: "FK_Prestamos_Libros_LibrosIdLibro",
+                        column: x => x.LibrosIdLibro,
+                        principalTable: "Libros",
+                        principalColumn: "IdLibro",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Prestamos_Usuarios_UsuariosIdUsuario",
                         column: x => x.UsuariosIdUsuario,
                         principalTable: "Usuarios",
                         principalColumn: "IdUsuario",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Prestamos_libros_LibrosIdLibro",
-                        column: x => x.LibrosIdLibro,
-                        principalTable: "libros",
-                        principalColumn: "IdLibro",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -119,10 +119,10 @@ namespace Thebook.Migrations
                 name: "Prestamos");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Libros");
 
             migrationBuilder.DropTable(
-                name: "libros");
+                name: "Usuarios");
         }
     }
 }
