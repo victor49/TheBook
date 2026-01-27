@@ -19,24 +19,19 @@ namespace Thebook.Repository
             => await _context.Libros.AsNoTracking()
             .FirstOrDefaultAsync(l =>l.Titulo.ToLower() == titulo.ToLower().Trim());
 
-        public Task Add(Libro libro)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task Add(Libro libro)
+            => await _context.AddAsync(libro);
 
         public void Update(Libro libro)
         {
-            throw new NotImplementedException();
+            _context.Libros.Attach(libro);
+            _context.Libros.Entry(libro).State = EntityState.Modified;
         }
 
         public void Delete(Libro libro)
-        {
-            throw new NotImplementedException();
-        }            
+            => _context.Libros.Remove(libro);
 
-        public Task Save()
-        {
-            throw new NotImplementedException();
-        }        
+        public async Task Save()
+            => await _context.SaveChangesAsync();
     }
 }
