@@ -83,8 +83,16 @@ namespace Thebook.Services
                 _repository.Update(usuario);
                 await _repository.Save();
 
-                
+                var usuarioDto = new UsuarioGetDto
+                {
+                    IdUsuario = usuario.IdUsuario,
+                    Nombre = usuario.Nombre,
+                    Identificacion = usuario.Identificacion,
+                    Correo = usuario.Correo
+                };
+                return usuarioDto;
             }
+            return null;
         }
     }
 }

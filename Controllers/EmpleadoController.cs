@@ -8,7 +8,7 @@ namespace Thebook.Controllers
     [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
-    public class EmpleadoController : Controller
+    public class EmpleadoController : ControllerBase
     {
         private readonly IEmpleadoService _empleadoService;
 

@@ -6,7 +6,7 @@ namespace Thebook.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LoginController : Controller
+    public class LoginController : ControllerBase
     {
         private readonly ILoginService _loginService;
 
