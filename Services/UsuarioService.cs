@@ -83,7 +83,6 @@ namespace Thebook.Services
                 _repository.Update(usuario);
                 await _repository.Save();
 
-<<<<<<< HEAD
                 var usuarioDto = new UsuarioGetDto
                 {
                     IdUsuario = usuario.IdUsuario,
@@ -93,11 +92,8 @@ namespace Thebook.Services
                 };
                 return usuarioDto;
             }
-            return null;
-=======
-                
-            }
->>>>>>> ff58513605b45dca2aaa3d298374bc44e4e60e83
+            return null;                                  
         }
     }
 }
+

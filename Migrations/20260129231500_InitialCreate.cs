@@ -69,7 +69,7 @@ namespace Thebook.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FechaPrestamo = table.Column<DateOnly>(type: "date", nullable: false),
                     FechaDevolucionEstimada = table.Column<DateOnly>(type: "date", nullable: false),
-                    FechaDevolucionReal = table.Column<DateOnly>(type: "date", nullable: false),
+                    FechaDevolucionReal = table.Column<DateOnly>(type: "date", nullable: true),
                     IdUsuario = table.Column<int>(type: "integer", nullable: false),
                     UsuariosIdUsuario = table.Column<int>(type: "integer", nullable: false),
                     IdLibro = table.Column<int>(type: "integer", nullable: false),

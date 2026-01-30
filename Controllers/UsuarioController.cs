@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Thebook.DTOs;
 using Thebook.Services;
 
 namespace Thebook.Controllers
 {
+    [Authorize(Roles ="Admin")]
     [ApiController]
     [Route("[controller]")]
     public class UsuarioController : ControllerBase

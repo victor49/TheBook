@@ -33,5 +33,10 @@ namespace Thebook.Repository
 
         public async Task Save()
             => await _context.SaveChangesAsync();
-    }
+
+        public async Task<bool> ExsiteLibro(int id)
+        {
+            return await _context.Libros.AnyAsync(l => l.IdLibro == id);
+        }
+    }       
 }

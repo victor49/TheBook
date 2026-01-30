@@ -10,5 +10,7 @@ namespace Thebook.Repository
         void Update(Libro libro);
         void Delete(Libro libro);
         Task Save();
+
+        Task<bool> ExsiteLibro(int id);
     }
 }

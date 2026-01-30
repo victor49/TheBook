@@ -12,7 +12,7 @@ using Thebook.Models;
 namespace Thebook.Migrations
 {
     [DbContext(typeof(TheBookContext))]
-    [Migration("20260126202124_InitialCreate")]
+    [Migration("20260129231500_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -96,7 +96,7 @@ namespace Thebook.Migrations
                     b.Property<DateOnly>("FechaDevolucionEstimada")
                         .HasColumnType("date");
 
-                    b.Property<DateOnly>("FechaDevolucionReal")
+                    b.Property<DateOnly?>("FechaDevolucionReal")
                         .HasColumnType("date");
 
                     b.Property<DateOnly>("FechaPrestamo")

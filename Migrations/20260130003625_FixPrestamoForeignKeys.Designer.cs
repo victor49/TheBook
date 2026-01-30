@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Thebook.Models;
@@ -11,9 +12,11 @@ using Thebook.Models;
 namespace Thebook.Migrations
 {
     [DbContext(typeof(TheBookContext))]
-    partial class TheBookContextModelSnapshot : ModelSnapshot
+    [Migration("20260130003625_FixPrestamoForeignKeys")]
+    partial class FixPrestamoForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
