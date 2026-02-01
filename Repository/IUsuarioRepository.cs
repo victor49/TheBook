@@ -10,5 +10,7 @@ namespace Thebook.Repository
         Task Add(Usuario usuario);
         void Update(Usuario usuario);
         Task Save();
+
+        Task<bool> ExisteUsuario(int id);
     }
 }

@@ -6,7 +6,7 @@ using Thebook.Services;
 
 namespace Thebook.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class PrestamosDevolucionesController : ControllerBase
@@ -24,8 +24,9 @@ namespace Thebook.Controllers
         [HttpPost]
         public async Task<ActionResult<PrestamoGetDto>> Add(PrestamoInsertDto prestamoInsertDto)
         {
-            await _prestamoService.Add(prestamoInsertDto);
-            return Ok();
+            var prestamoDto = await _prestamoService.Add(prestamoInsertDto);
+
+            return prestamoDto == null ? NotFound() : Ok(prestamoInsertDto);
         }
     }
 }

@@ -8,18 +8,27 @@ namespace Thebook.Services
     {
         private readonly IPrestamoRepository _prestamoRepository;
         private readonly ILibroRepository _libroRepository;
+        private readonly IUsuarioRepository  _usuarioRepository;
+        private readonly ILibroService _libroService;
 
-        public PrestamoService(IPrestamoRepository prestamoRepository, ILibroRepository libroRepository)
+        public PrestamoService(IPrestamoRepository prestamoRepository, ILibroRepository libroRepository, 
+            IUsuarioRepository usuarioRepository, ILibroService libroService)
         {
             _prestamoRepository = prestamoRepository;
             _libroRepository = libroRepository;
+            _usuarioRepository = usuarioRepository;
+            _libroService = libroService;
         }
 
         public async Task<PrestamoGetDto> Add(PrestamoInsertDto prestamoInsertDto)
         {
+            //Comprobar si existe en la db el usuario o libro 
             var libroExiste = await _libroRepository.ExsiteLibro(prestamoInsertDto.IdLibro);
+            var usurioExiste = await _usuarioRepository.ExisteUsuario(prestamoInsertDto.IdUsuario);
 
-            if(libroExiste)
+            var cantidadLibro = await _libroRepository.CantidaLibro(prestamoInsertDto.IdLibro);
+
+            if(libroExiste && usurioExiste && cantidadLibro.CantidadDisponible > 0)
             {
                 var prestamo = new Prestamo()
                 {
@@ -30,6 +39,9 @@ namespace Thebook.Services
                 }; 
                 await _prestamoRepository.Add(prestamo);
                 await _prestamoRepository.Save();
+                
+                //Disminuir cantidiad de libros
+                await _libroService.UpdateCantidaLibro(prestamoInsertDto.IdLibro);
 
                 var prestamoDto = new PrestamoGetDto
                 {

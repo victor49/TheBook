@@ -126,5 +126,18 @@ namespace Thebook.Services
             }
             return null;
         }
+
+        public async Task UpdateCantidaLibro(int id)
+        {
+            var libro = await _libroRepository.GetById(id);
+
+            if (libro != null)
+            {
+                libro.CantidadDisponible--;
+
+                _libroRepository.Update(libro);
+                await _libroRepository.Save();               
+            }            
+        }
     }
 }
