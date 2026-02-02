@@ -1,6 +1,4 @@
-﻿using Thebook.Models;
-
-namespace Thebook.DTOs
+﻿namespace Thebook.DTOs
 {
     public class PrestamoGetDto
     {

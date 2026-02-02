@@ -10,6 +10,7 @@ namespace Thebook.Services
         Task<LibroGetDto> Update(string Titulo, LibroUpdateDto libroUpdateDto);
         Task<LibroGetDto> Delete(string titulo);
 
-        Task UpdateCantidaLibro(int id);
+        Task UpdateCantidaLibroDisminuir(int id);
+        Task UpdateCantidaLibroAumentar(int id);
     }
 }

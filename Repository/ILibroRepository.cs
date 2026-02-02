@@ -11,10 +11,5 @@ namespace Thebook.Repository
         void Update(Libro libro);
         void Delete(Libro libro);
         Task Save();
-
-        Task<bool> ExsiteLibro(int id);
-        Task<Libro> CantidaLibro(int id);
-
-        void UpdateCantidaLibro(Libro libro);
     }
 }

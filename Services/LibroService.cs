@@ -127,7 +127,7 @@ namespace Thebook.Services
             return null;
         }
 
-        public async Task UpdateCantidaLibro(int id)
+        public async Task UpdateCantidaLibroDisminuir(int id)
         {
             var libro = await _libroRepository.GetById(id);
 
@@ -138,6 +138,18 @@ namespace Thebook.Services
                 _libroRepository.Update(libro);
                 await _libroRepository.Save();               
             }            
+        }
+
+        public async Task UpdateCantidaLibroAumentar(int id)
+        {
+            var libro = await _libroRepository.GetById(id);
+
+            if(libro != null)
+            {
+                libro.CantidadDisponible++;
+                _libroRepository.Update(libro);
+                await _libroRepository.Save();
+            }
         }
     }
 }

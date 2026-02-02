@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Thebook.Models;
 
 namespace Thebook.Repository
@@ -17,7 +16,7 @@ namespace Thebook.Repository
             => await _context.Libros.ToListAsync();
 
         public async Task<Libro> GetById(int id)
-            => await _context.Libros.FindAsync(id);
+            => await _context.Libros.FindAsync(id);      
 
         public async Task<Libro> GetByTitle(string titulo)
             => await _context.Libros.AsNoTracking()
@@ -36,20 +35,6 @@ namespace Thebook.Repository
             => _context.Libros.Remove(libro);
 
         public async Task Save()
-            => await _context.SaveChangesAsync();
-
-        public async Task<bool> ExsiteLibro(int id)
-        {
-            return await _context.Libros.AnyAsync(l => l.IdLibro == id);
-        }
-
-        public async Task<Libro> CantidaLibro(int id)
-            => await _context.Libros.FindAsync(id);
-
-        public void UpdateCantidaLibro(Libro libro)
-        {
-            _context.Libros.Attach(libro);
-            _context.Libros.Entry(libro).State = EntityState.Modified;
-        }
+            => await _context.SaveChangesAsync();       
     }       
 }

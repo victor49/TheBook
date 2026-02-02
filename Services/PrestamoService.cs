@@ -1,4 +1,5 @@
 ﻿using Thebook.DTOs;
+using Thebook.Exceptions;
 using Thebook.Models;
 using Thebook.Repository;
 
@@ -23,12 +24,19 @@ namespace Thebook.Services
         public async Task<PrestamoGetDto> Add(PrestamoInsertDto prestamoInsertDto)
         {
             //Comprobar si existe en la db el usuario o libro 
-            var libroExiste = await _libroRepository.ExsiteLibro(prestamoInsertDto.IdLibro);
-            var usurioExiste = await _usuarioRepository.ExisteUsuario(prestamoInsertDto.IdUsuario);
+            var libro = await _libroRepository.GetById(prestamoInsertDto.IdLibro);
+            var usuario = await _usuarioRepository.GetById(prestamoInsertDto.IdUsuario);
 
-            var cantidadLibro = await _libroRepository.CantidaLibro(prestamoInsertDto.IdLibro);
+            if (libro == null)
+                throw new BusinessException("Libro no Existe");
 
-            if(libroExiste && usurioExiste && cantidadLibro.CantidadDisponible > 0)
+            else if (libro.CantidadDisponible == 0)
+                throw new BusinessException("No hay libros diponibles");
+
+            else if (usuario == null)
+                throw new BusinessException("Usuario no existe");
+
+            else
             {
                 var prestamo = new Prestamo()
                 {
@@ -41,18 +49,16 @@ namespace Thebook.Services
                 await _prestamoRepository.Save();
                 
                 //Disminuir cantidiad de libros
-                await _libroService.UpdateCantidaLibro(prestamoInsertDto.IdLibro);
+                await _libroService.UpdateCantidaLibroDisminuir(prestamoInsertDto.IdLibro);
 
                 var prestamoDto = new PrestamoGetDto
                 {
                     IdPrestamo = prestamo.IdPrestamo,
                     FechaPrestamo = prestamo.FechaPrestamo,
-                    FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada
-                    //Usuario = prestamo.IdUsuario,
+                    FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada                   
                 };
                 return prestamoDto;
             }
-            return null;
         }
     }
 }

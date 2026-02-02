@@ -29,6 +29,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
 builder.Services.AddScoped<IPrestamoService, PrestamoService>();
+builder.Services.AddScoped<IDevolucionRepository, DevolucionRepository>();
+builder.Services.AddScoped<IDevolucionService, DevolucionService>();
 
 //jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
