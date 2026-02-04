@@ -1,6 +1,7 @@
 ﻿using Thebook.DTOs;
 using Thebook.Exceptions;
 using Thebook.Repository;
+using Thebook.Results;
 
 namespace Thebook.Services
 {
@@ -15,7 +16,7 @@ namespace Thebook.Services
             _libroService = libroService;
         }
 
-        public async Task<PrestamoGetDto> UpdateDevolucion(int id)
+        public async Task<ServiceResult<PrestamoGetDto>> UpdateDevolucion(int id)
         {
             var prestamo = await _devolucionRepository.GetById(id);
 
@@ -41,9 +42,34 @@ namespace Thebook.Services
                         IdPrestamo = prestamo.IdPrestamo,
                         FechaPrestamo = prestamo.FechaPrestamo,
                         FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada,
-                        FechaDevolucionReal = DateOnly.FromDateTime(DateTime.Now)
+                        FechaDevolucionReal = DateOnly.FromDateTime(DateTime.Now),
+
+                        Usuario = new UsuarioGetDto
+                        {
+                            IdUsuario = prestamo.Usuarios.IdUsuario,
+                            Nombre = prestamo.Usuarios.Nombre,
+                            Correo = prestamo.Usuarios.Correo
+                        },
+
+                        Libro = new LibroGetDto
+                        {
+                            IdLibro = prestamo.Libros.IdLibro,
+                            Titulo = prestamo.Libros.Titulo,
+                            Autor = prestamo.Libros.Autor,
+                            CantidadDisponible = prestamo.Libros.CantidadDisponible
+                        }
                     };
-                    return prestamoDto;
+
+                    var result = new ServiceResult<PrestamoGetDto>
+                    {
+                        Success = true,
+                        Data = prestamoDto
+                    };
+
+                    if (prestamo.FechaDevolucionReal > prestamo.FechaDevolucionEstimada)
+                        result.Message = "la devolución se realizo fuera de la fecha estimada.";
+
+                    return result;                                        
                 }                              
             }
         }

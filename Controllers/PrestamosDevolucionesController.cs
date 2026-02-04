@@ -44,6 +44,10 @@ namespace Thebook.Controllers
             try
             {
                 var devolucion = await _devolucionService.UpdateDevolucion(id);
+
+                if (!devolucion.Success)
+                    return BadRequest(devolucion.Error);
+
                 return Ok(devolucion);
             }
             catch (BusinessException ex)

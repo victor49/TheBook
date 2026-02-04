@@ -1,9 +1,10 @@
 ﻿using Thebook.DTOs;
+using Thebook.Results;
 
 namespace Thebook.Services
 {
     public interface IDevolucionService
     {
-        Task<PrestamoGetDto> UpdateDevolucion(int id);
+        Task<ServiceResult<PrestamoGetDto>> UpdateDevolucion(int id);
     }
 }

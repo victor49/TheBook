@@ -5,6 +5,7 @@ namespace Thebook.Repository
     public interface IPrestamoRepository
     {
         Task Add(Prestamo prestamo);
+        Task<int> CountPrestamosActivosByUsuario(int idUsuario);
         Task Save();
     }
 }

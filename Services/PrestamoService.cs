@@ -27,6 +27,9 @@ namespace Thebook.Services
             var libro = await _libroRepository.GetById(prestamoInsertDto.IdLibro);
             var usuario = await _usuarioRepository.GetById(prestamoInsertDto.IdUsuario);
 
+            //Validar que el usuario no supere mas de 3 libros prestados 
+            var prestamosActivos = await _prestamoRepository.CountPrestamosActivosByUsuario(prestamoInsertDto.IdUsuario);
+
             if (libro == null)
                 throw new BusinessException("Libro no Existe");
 
@@ -36,6 +39,9 @@ namespace Thebook.Services
             else if (usuario == null)
                 throw new BusinessException("Usuario no existe");
 
+            else if (prestamosActivos >= 3)
+                throw new BusinessException("El usuario ya tiene el máximo de 3 libros prestados");
+
             else
             {
                 var prestamo = new Prestamo()
@@ -44,10 +50,10 @@ namespace Thebook.Services
                     FechaDevolucionEstimada = prestamoInsertDto.FechaDevolucionEstimada,
                     IdLibro = prestamoInsertDto.IdLibro,
                     IdUsuario = prestamoInsertDto.IdUsuario
-                }; 
+                };
                 await _prestamoRepository.Add(prestamo);
                 await _prestamoRepository.Save();
-                
+
                 //Disminuir cantidiad de libros
                 await _libroService.UpdateCantidaLibroDisminuir(prestamoInsertDto.IdLibro);
 
@@ -55,7 +61,22 @@ namespace Thebook.Services
                 {
                     IdPrestamo = prestamo.IdPrestamo,
                     FechaPrestamo = prestamo.FechaPrestamo,
-                    FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada                   
+                    FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada,
+
+                    Usuario = new UsuarioGetDto
+                    {
+                        IdUsuario = prestamo.Usuarios.IdUsuario,
+                        Nombre = prestamo.Usuarios.Nombre,
+                        Correo = prestamo.Usuarios.Correo
+                    },
+
+                    Libro = new LibroGetDto
+                    {
+                        IdLibro = prestamo.Libros.IdLibro,
+                        Titulo = prestamo.Libros.Titulo,
+                        Autor = prestamo.Libros.Autor,
+                        CantidadDisponible = prestamo.Libros.CantidadDisponible
+                    }
                 };
                 return prestamoDto;
             }
