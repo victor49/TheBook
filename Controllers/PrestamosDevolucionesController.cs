@@ -34,7 +34,7 @@ namespace Thebook.Controllers
             }
             catch (BusinessException ex)
             {
-                return BadRequest(new {error = ex.Message });
+                return BadRequest(new { error = ex.Message });
             }                        
         }
 
@@ -49,8 +49,7 @@ namespace Thebook.Controllers
             catch (BusinessException ex)
             {
                 
-                return BadRequest(new { error = ex.Message });
-                
+                return BadRequest(new { error = ex.Message });                
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using Thebook.DTOs;
+using Thebook.Exceptions;
 using Thebook.Repository;
 
 namespace Thebook.Services
@@ -19,24 +20,31 @@ namespace Thebook.Services
             var prestamo = await _devolucionRepository.GetById(id);
 
             if (prestamo == null)
-                throw new Exception("Prestamo no existe");
+                throw new BusinessException("Prestamo no existe");            
 
             else
             {
                 prestamo.FechaDevolucionReal = DateOnly.FromDateTime(DateTime.Now);
 
-                _devolucionRepository.Update(prestamo);
-                await _devolucionRepository.Save();
+                if (prestamo.FechaDevolucionReal < prestamo.FechaPrestamo)
+                    throw new BusinessException("La fecha de devolución no puede ser anterior a la fecha de préstamo.");
 
-                await _libroService.UpdateCantidaLibroAumentar(prestamo.IdLibro);
-
-                var prestamoDto = new PrestamoGetDto
+                else
                 {
-                    IdPrestamo = prestamo.IdPrestamo,
-                    FechaPrestamo = prestamo.FechaPrestamo,
-                    FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada
-                };
-                return prestamoDto;
+                    _devolucionRepository.Update(prestamo);
+                    await _devolucionRepository.Save();
+
+                    await _libroService.UpdateCantidaLibroAumentar(prestamo.IdLibro);
+
+                    var prestamoDto = new PrestamoGetDto
+                    {
+                        IdPrestamo = prestamo.IdPrestamo,
+                        FechaPrestamo = prestamo.FechaPrestamo,
+                        FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada,
+                        FechaDevolucionReal = DateOnly.FromDateTime(DateTime.Now)
+                    };
+                    return prestamoDto;
+                }                              
             }
         }
     }
