@@ -12,6 +12,14 @@ namespace Thebook.Repository
             _context = theContext;
         }
 
+        public async Task<IEnumerable<Prestamo>> GetPrestamosActivos()
+        {
+            return await _context.Prestamos.Include(p => p.Usuarios)
+                                           .Include(p => p.Libros)
+                                           .Where(p => p.FechaDevolucionReal == null)
+                                           .ToListAsync();
+        }
+
         public async Task Add(Prestamo prestamo)
             => await _context.Prestamos.AddAsync(prestamo);
 

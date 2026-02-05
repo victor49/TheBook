@@ -4,7 +4,8 @@ namespace Thebook.Repository
 {
     public interface IPrestamoRepository
     {
-        Task Add(Prestamo prestamo);
+        Task<IEnumerable<Prestamo>> GetPrestamosActivos();
+        Task Add(Prestamo prestamo);     
         Task<int> CountPrestamosActivosByUsuario(int idUsuario);
         Task Save();
     }
