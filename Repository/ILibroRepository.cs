@@ -4,12 +4,13 @@ namespace Thebook.Repository
 {
     public interface ILibroRepository
     {
-        Task<IEnumerable<Libro>> Get();
+        Task<IEnumerable<Libro>> Get();       
         Task<Libro> GetById(int id);
         Task<Libro> GetByTitle(string titulo);
         Task Add(Libro libro);
         void Update(Libro libro);
         void Delete(Libro libro);
+        Task<IEnumerable<Libro>> GetLibrosNoDisponibles();
         Task Save();      
     }
 }

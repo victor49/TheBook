@@ -35,6 +35,11 @@ namespace Thebook.Repository
             => _context.Libros.Remove(libro);
 
         public async Task Save()
-            => await _context.SaveChangesAsync();       
+            => await _context.SaveChangesAsync();
+
+        public async Task<IEnumerable<Libro>> GetLibrosNoDisponibles()
+        {
+            return await _context.Libros.Where(l => l.CantidadDisponible == 0).ToListAsync();
+        }
     }       
 }

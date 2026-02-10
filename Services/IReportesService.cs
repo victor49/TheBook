@@ -7,5 +7,6 @@ namespace Thebook.Services
         Task<IEnumerable<PrestamoGetDto>> GetPrestamosActivos();
         Task<IEnumerable<PrestamoGetDto>> GetPrestamosPorUsuario(int idUsuario);
         Task<LibroGetDto> LibroMasPrestado();
+        Task<IEnumerable<LibroGetDto>> GetLibrosNoDisponibles();
     }
 }

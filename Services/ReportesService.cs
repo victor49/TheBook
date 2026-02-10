@@ -14,7 +14,7 @@ namespace Thebook.Services
         {
             _prestamoRepository = prestamoRepository;
             _libroRepository = libroRepository;
-        }
+        }       
 
         public async Task<IEnumerable<PrestamoGetDto>> GetPrestamosActivos()
         {
@@ -74,6 +74,20 @@ namespace Thebook.Services
                 return libroDto;
             }
             return null;
+        }
+        public async Task<IEnumerable<LibroGetDto>> GetLibrosNoDisponibles()
+        {
+            var librosNoDisponibles = await _libroRepository.GetLibrosNoDisponibles();
+
+            return librosNoDisponibles.Select(l => new LibroGetDto
+            {
+                IdLibro = l.IdLibro,
+                Titulo = l.Titulo,
+                Autor = l.Autor,
+                Editorial = l.Editorial,
+                Categoria = l.Categoria,
+                CantidadDisponible = l.CantidadDisponible
+            });                                                 
         }
     }
 }

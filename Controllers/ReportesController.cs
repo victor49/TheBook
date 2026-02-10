@@ -37,5 +37,11 @@ namespace Thebook.Controllers
 
             return LibroDto == null ? NotFound() : Ok(LibroDto);
         }
+
+        [HttpGet("librosNoDisponibles")]
+        public async Task<IEnumerable<LibroGetDto>> GetLibrosNoDisponibles()
+        {
+            return await _reportesService.GetLibrosNoDisponibles();
+        }
     }
 }
