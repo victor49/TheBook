@@ -8,10 +8,12 @@ namespace Thebook.Services
     public class ReportesService : IReportesService
     {
         private readonly IPrestamoRepository _prestamoRepository;
+        private readonly ILibroRepository _libroRepository;
 
-        public ReportesService(IPrestamoRepository prestamoRepository)
+        public ReportesService(IPrestamoRepository prestamoRepository, ILibroRepository libroRepository)
         {
             _prestamoRepository = prestamoRepository;
+            _libroRepository = libroRepository;
         }
 
         public async Task<IEnumerable<PrestamoGetDto>> GetPrestamosActivos()
@@ -50,6 +52,28 @@ namespace Thebook.Services
                 FechaDevolucionEstimada = p.FechaDevolucionEstimada,
                 FechaDevolucionReal = p.FechaDevolucionReal
             });
+        }
+
+        public async Task<LibroGetDto> LibroMasPrestado()
+        {
+            var idLibroMasPrestado = await _prestamoRepository.LibroMasPrestado();
+
+            var libro = await _libroRepository.GetById(idLibroMasPrestado);
+
+            if (libro  != null)
+            {
+                var libroDto = new LibroGetDto
+                {
+                    IdLibro = libro.IdLibro,
+                    Titulo = libro.Titulo,
+                    Autor = libro.Autor,
+                    Editorial = libro.Editorial,
+                    Categoria = libro.Categoria,
+                    CantidadDisponible = libro.CantidadDisponible
+                };
+                return libroDto;
+            }
+            return null;
         }
     }
 }

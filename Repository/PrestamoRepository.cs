@@ -39,10 +39,10 @@ namespace Thebook.Repository
 
         public async Task<int> LibroMasPrestado()
         {
-             var libro = await _context.Prestamos.GroupBy(l => l.IdLibro)
+            return await _context.Prestamos.GroupBy(p => p.IdLibro)
                                             .OrderByDescending(g => g.Count())
+                                            .Select(g => g.Key)
                                             .FirstOrDefaultAsync();
-            return libro.Key;
         }
 
         public async Task Save()

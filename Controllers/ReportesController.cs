@@ -29,5 +29,13 @@ namespace Thebook.Controllers
         {
             return await _reportesService.GetPrestamosPorUsuario(id);
         }
+
+        [HttpGet("libroMasPrestado")]
+        public async Task<ActionResult<LibroGetDto>> GetLibroMasPrestado()
+        {
+            var LibroDto = await _reportesService.LibroMasPrestado();
+
+            return LibroDto == null ? NotFound() : Ok(LibroDto);
+        }
     }
 }
