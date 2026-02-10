@@ -20,6 +20,11 @@ namespace Thebook.Repository
                                            .ToListAsync();
         }
 
+        public async Task<IEnumerable<Prestamo>> GetPrestamosPorUsuario(int id)
+        {
+            return await _context.Prestamos.Where(p => p.IdUsuario == id).ToListAsync();
+        }
+
         public async Task Add(Prestamo prestamo)
             => await _context.Prestamos.AddAsync(prestamo);
 
@@ -32,7 +37,17 @@ namespace Thebook.Repository
                 );
         }
 
+        public async Task<int> LibroMasPrestado()
+        {
+             var libro = await _context.Prestamos.GroupBy(l => l.IdLibro)
+                                            .OrderByDescending(g => g.Count())
+                                            .FirstOrDefaultAsync();
+            return libro.Key;
+        }
+
         public async Task Save()
             => await _context.SaveChangesAsync();
+
+        
     }
 }

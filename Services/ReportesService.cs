@@ -38,5 +38,18 @@ namespace Thebook.Services
                 }
             });
         }
+
+        public async Task<IEnumerable<PrestamoGetDto>> GetPrestamosPorUsuario(int idUsuario)
+        {
+            var prestamos = await _prestamoRepository.GetPrestamosPorUsuario(idUsuario);
+
+            return prestamos.Select(p => new PrestamoGetDto
+            {
+                IdPrestamo = p.IdPrestamo,
+                FechaPrestamo = p.FechaPrestamo,
+                FechaDevolucionEstimada = p.FechaDevolucionEstimada,
+                FechaDevolucionReal = p.FechaDevolucionReal
+            });
+        }
     }
 }

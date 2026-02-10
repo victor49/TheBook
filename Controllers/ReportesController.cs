@@ -19,9 +19,15 @@ namespace Thebook.Controllers
         }
 
         [HttpGet("prestamosActivos")]
-        public async Task<IEnumerable<PrestamoGetDto>> Get ()
+        public async Task<IEnumerable<PrestamoGetDto>> GetPrestamosActivos()
         {
             return await _reportesService.GetPrestamosActivos();
+        }
+        
+        [HttpGet("prestamosPorUsuario/{id}")]
+        public async Task<IEnumerable<PrestamoGetDto>> GetPrestamoPorUsuario(int id)
+        {
+            return await _reportesService.GetPrestamosPorUsuario(id);
         }
     }
 }
