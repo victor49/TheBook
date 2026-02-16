@@ -21,9 +21,6 @@ namespace Thebook.Controllers
             _devolucionService = devolucionService;
         }
 
-        //[HttpGet]
-
-
         [HttpPost]
         public async Task<ActionResult<PrestamoGetDto>> Add(PrestamoInsertDto prestamoInsertDto)
         {

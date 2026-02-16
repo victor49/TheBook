@@ -1,4 +1,5 @@
-﻿using Thebook.DTOs;
+﻿using AutoMapper;
+using Thebook.DTOs;
 using Thebook.Exceptions;
 using Thebook.Repository;
 using Thebook.Results;
@@ -9,11 +10,14 @@ namespace Thebook.Services
     {
         private readonly IDevolucionRepository _devolucionRepository;
         private readonly ILibroService _libroService;
+        private readonly IMapper _mapper;
 
-        public DevolucionService(IDevolucionRepository devolucionRepository, ILibroService libroService)
+        public DevolucionService(IDevolucionRepository devolucionRepository, ILibroService libroService,
+                                 IMapper mapper)
         {
             _devolucionRepository = devolucionRepository;
             _libroService = libroService;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResult<PrestamoGetDto>> UpdateDevolucion(int id)
@@ -25,6 +29,7 @@ namespace Thebook.Services
 
             else
             {
+                //Agregar la fecha de la devolucion del libro
                 prestamo.FechaDevolucionReal = DateOnly.FromDateTime(DateTime.Now);
 
                 if (prestamo.FechaDevolucionReal < prestamo.FechaPrestamo)
@@ -37,29 +42,9 @@ namespace Thebook.Services
 
                     await _libroService.UpdateCantidaLibroAumentar(prestamo.IdLibro);
 
-                    var prestamoDto = new PrestamoGetDto
-                    {
-                        IdPrestamo = prestamo.IdPrestamo,
-                        FechaPrestamo = prestamo.FechaPrestamo,
-                        FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada,
-                        FechaDevolucionReal = DateOnly.FromDateTime(DateTime.Now),
+                    var prestamoDto = _mapper.Map<PrestamoGetDto>(prestamo);
 
-                        Usuario = new UsuarioGetDto
-                        {
-                            IdUsuario = prestamo.Usuarios.IdUsuario,
-                            Nombre = prestamo.Usuarios.Nombre,
-                            Correo = prestamo.Usuarios.Correo
-                        },
-
-                        Libro = new LibroGetDto
-                        {
-                            IdLibro = prestamo.Libros.IdLibro,
-                            Titulo = prestamo.Libros.Titulo,
-                            Autor = prestamo.Libros.Autor,
-                            CantidadDisponible = prestamo.Libros.CantidadDisponible
-                        }
-                    };
-
+                    // Si la devolución se realizó fuera de la fecha estimada. Con un Generic
                     var result = new ServiceResult<PrestamoGetDto>
                     {
                         Success = true,

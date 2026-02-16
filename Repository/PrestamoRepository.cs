@@ -22,7 +22,9 @@ namespace Thebook.Repository
 
         public async Task<IEnumerable<Prestamo>> GetPrestamosPorUsuario(int id)
         {
-            return await _context.Prestamos.Where(p => p.IdUsuario == id).ToListAsync();
+            return await _context.Prestamos.Include(p => p.Libros)
+                                            .Where(p => p.IdUsuario == id)
+                                            .ToListAsync();
         }
 
         public async Task Add(Prestamo prestamo)

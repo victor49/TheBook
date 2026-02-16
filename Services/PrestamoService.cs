@@ -1,4 +1,5 @@
-﻿using Thebook.DTOs;
+﻿using AutoMapper;
+using Thebook.DTOs;
 using Thebook.Exceptions;
 using Thebook.Models;
 using Thebook.Repository;
@@ -11,14 +12,16 @@ namespace Thebook.Services
         private readonly ILibroRepository _libroRepository;
         private readonly IUsuarioRepository  _usuarioRepository;
         private readonly ILibroService _libroService;
+        private readonly IMapper _mapper;
 
         public PrestamoService(IPrestamoRepository prestamoRepository, ILibroRepository libroRepository, 
-            IUsuarioRepository usuarioRepository, ILibroService libroService)
+            IUsuarioRepository usuarioRepository, ILibroService libroService, IMapper mapper)
         {
             _prestamoRepository = prestamoRepository;
             _libroRepository = libroRepository;
             _usuarioRepository = usuarioRepository;
             _libroService = libroService;
+            _mapper = mapper;
         }
 
         public async Task<PrestamoGetDto> Add(PrestamoInsertDto prestamoInsertDto)
@@ -44,40 +47,17 @@ namespace Thebook.Services
 
             else
             {
-                var prestamo = new Prestamo()
-                {
-                    FechaPrestamo = DateOnly.FromDateTime(DateTime.Now),
-                    FechaDevolucionEstimada = prestamoInsertDto.FechaDevolucionEstimada,
-                    IdLibro = prestamoInsertDto.IdLibro,
-                    IdUsuario = prestamoInsertDto.IdUsuario
-                };
+                var prestamo = _mapper.Map<Prestamo>(prestamoInsertDto);
+                
+                prestamo.FechaPrestamo = DateOnly.FromDateTime(DateTime.Now);
+
                 await _prestamoRepository.Add(prestamo);
                 await _prestamoRepository.Save();
 
                 //Disminuir cantidiad de libros
                 await _libroService.UpdateCantidaLibroDisminuir(prestamoInsertDto.IdLibro);
 
-                var prestamoDto = new PrestamoGetDto
-                {
-                    IdPrestamo = prestamo.IdPrestamo,
-                    FechaPrestamo = prestamo.FechaPrestamo,
-                    FechaDevolucionEstimada = prestamo.FechaDevolucionEstimada,
-
-                    Usuario = new UsuarioGetDto
-                    {
-                        IdUsuario = prestamo.Usuarios.IdUsuario,
-                        Nombre = prestamo.Usuarios.Nombre,
-                        Correo = prestamo.Usuarios.Correo
-                    },
-
-                    Libro = new LibroGetDto
-                    {
-                        IdLibro = prestamo.Libros.IdLibro,
-                        Titulo = prestamo.Libros.Titulo,
-                        Autor = prestamo.Libros.Autor,
-                        CantidadDisponible = prestamo.Libros.CantidadDisponible
-                    }
-                };
+                var prestamoDto = _mapper.Map<PrestamoGetDto>(prestamo);
                 return prestamoDto;
             }
         }

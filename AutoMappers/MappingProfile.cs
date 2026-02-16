@@ -31,6 +31,18 @@ namespace Thebook.AutoMappers
             CreateMap<EmpleadoInsertDto, Empleado>();
             //Update
             CreateMap<EmpleadoUpdateDto, Empleado>();
+
+            //  Reportes y Prestamos
+            //Prestamos Activos
+            CreateMap<Prestamo, PrestamoGetDto>()
+                .ForMember(dto => dto.Usuario,
+                           m => m.MapFrom(u => u.Usuarios))
+                .ForMember(dto => dto.Libro,
+                           m => m.MapFrom(l => l.Libros));
+
+            //  Prestamos
+            //Add
+            CreateMap<PrestamoInsertDto, Prestamo>();
         }
     }
 }

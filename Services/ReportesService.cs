@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Thebook.DTOs;
-using Thebook.Exceptions;
-using Thebook.Models;
 using Thebook.Repository;
 
 namespace Thebook.Services
@@ -17,44 +15,20 @@ namespace Thebook.Services
             _prestamoRepository = prestamoRepository;
             _libroRepository = libroRepository;
             _mapper = mapper;
-        }       
+        }
 
         public async Task<IEnumerable<PrestamoGetDto>> GetPrestamosActivos()
         {
             var prestamosActivos = await _prestamoRepository.GetPrestamosActivos();
 
-            return prestamosActivos.Select(p => new PrestamoGetDto
-            {
-                IdPrestamo = p.IdPrestamo,
-                FechaPrestamo = p.FechaPrestamo,
-                FechaDevolucionEstimada = p.FechaDevolucionEstimada,
+            return prestamosActivos.Select(p => _mapper.Map<PrestamoGetDto>(p)).ToList();
 
-                Usuario = new UsuarioGetDto
-                {
-                    IdUsuario = p.Usuarios.IdUsuario,
-                    Nombre = p.Usuarios.Nombre,
-                    Correo = p.Usuarios.Correo
-                },
-
-                Libro = new LibroGetDto
-                {
-                    IdLibro = p.Libros.IdLibro,
-                    Titulo = p.Libros.Titulo                    
-                }
-            });
         }
-
         public async Task<IEnumerable<PrestamoGetDto>> GetPrestamosPorUsuario(int idUsuario)
         {
             var prestamos = await _prestamoRepository.GetPrestamosPorUsuario(idUsuario);
 
-            return prestamos.Select(p => new PrestamoGetDto
-            {
-                IdPrestamo = p.IdPrestamo,
-                FechaPrestamo = p.FechaPrestamo,
-                FechaDevolucionEstimada = p.FechaDevolucionEstimada,
-                FechaDevolucionReal = p.FechaDevolucionReal
-            });
+            return prestamos.Select(p => _mapper.Map<PrestamoGetDto>(p));
         }
 
         public async Task<LibroGetDto> LibroMasPrestado()
