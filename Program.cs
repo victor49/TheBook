@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Thebook.AutoMappers;
 using Thebook.Models;
 using Thebook.Repository;
 using Thebook.Services;
@@ -18,7 +19,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<TheBookContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("MiConexion")));
 
-//Inyeccion de dependencias
+//Inyeccion de dependencias Repositorys y Services
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEmpeadoRepository, EmpleadoRepository>();
@@ -32,6 +33,9 @@ builder.Services.AddScoped<IPrestamoService, PrestamoService>();
 builder.Services.AddScoped<IDevolucionRepository, DevolucionRepository>();
 builder.Services.AddScoped<IDevolucionService, DevolucionService>();
 builder.Services.AddScoped<IReportesService, ReportesService>();
+
+//Mappers
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
 
 //jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

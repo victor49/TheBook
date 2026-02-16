@@ -1,4 +1,5 @@
-﻿using Thebook.DTOs;
+﻿using AutoMapper;
+using Thebook.DTOs;
 using Thebook.Models;
 using Thebook.Repository;
 
@@ -7,38 +8,28 @@ namespace Thebook.Services
     public class UsuarioService : IUsuarioService
     {
         private readonly IUsuarioRepository _repository;
+        private readonly IMapper _mapper;
 
-        public UsuarioService(IUsuarioRepository repository)
+        public UsuarioService(IUsuarioRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<UsuarioGetDto>> Get()
         {
             var usuarios = await _repository.Get();
 
-            return usuarios.Select(u => new UsuarioGetDto
-            {
-                IdUsuario = u.IdUsuario,
-                Nombre = u.Nombre,
-                Identificacion = u.Identificacion,
-                Correo = u.Correo
-            });
+            return usuarios.Select(u => _mapper.Map<UsuarioGetDto>(u));
         }
 
         public async Task<UsuarioGetDto> GetById(int id)
         {
-            var usuarios = await _repository.GetById(id);
+            var usuario = await _repository.GetById(id);
 
-            if (usuarios != null)
+            if (usuario != null)
             {
-                var usuariDto = new UsuarioGetDto
-                {
-                    IdUsuario = usuarios.IdUsuario,
-                    Nombre = usuarios.Nombre,
-                    Identificacion = usuarios.Identificacion,
-                    Correo = usuarios.Correo
-                };
+                var usuariDto = _mapper.Map<UsuarioGetDto>(usuario);
                 return usuariDto;
             }
             return null;
@@ -46,24 +37,11 @@ namespace Thebook.Services
 
         public async Task<UsuarioGetDto> Add(UsuarioInsertDto usuarioInsertDto)
         {
-            var usuario = new Usuario
-            {
-                Nombre = usuarioInsertDto.Nombre,
-                Apellido = usuarioInsertDto.Apellido,
-                Identificacion = usuarioInsertDto.Identificacion,
-                Correo = usuarioInsertDto.Correo,
-                Celular = usuarioInsertDto.Celular
-            };
+            var usuario = _mapper.Map<Usuario>(usuarioInsertDto);
             await _repository.Add(usuario);
             await _repository.Save();
 
-            var usuarioDto = new UsuarioGetDto
-            {
-                IdUsuario = usuario.IdUsuario,
-                Nombre = usuario.Nombre,
-                Identificacion = usuario.Identificacion,
-                Correo = usuario.Correo
-            };
+            var usuarioDto = _mapper.Map<UsuarioGetDto>(usuario);
             return usuarioDto;
 
         }       
@@ -74,22 +52,12 @@ namespace Thebook.Services
 
             if (usuario != null)
             {
-                usuario.Nombre = usuarioUpdateDto.Nombre;
-                usuario.Apellido = usuarioUpdateDto.Apellido;
-                usuario.Identificacion = usuarioUpdateDto.Identificacion;
-                usuario.Correo = usuarioUpdateDto.Correo;
-                usuario.Celular = usuarioUpdateDto.Celular;
+                usuario = _mapper.Map(usuarioUpdateDto, usuario);
 
                 _repository.Update(usuario);
                 await _repository.Save();
 
-                var usuarioDto = new UsuarioGetDto
-                {
-                    IdUsuario = usuario.IdUsuario,
-                    Nombre = usuario.Nombre,
-                    Identificacion = usuario.Identificacion,
-                    Correo = usuario.Correo
-                };
+                var usuarioDto = _mapper.Map<UsuarioGetDto>(usuario);
                 return usuarioDto;
             }
             return null;                                  

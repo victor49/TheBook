@@ -23,7 +23,7 @@ namespace Thebook.Services
 
         public async Task<PrestamoGetDto> Add(PrestamoInsertDto prestamoInsertDto)
         {
-            //Comprobar si existe en la db el usuario o libro 
+            //Comprobar si existe en la db el usuario y libro 
             var libro = await _libroRepository.GetById(prestamoInsertDto.IdLibro);
             var usuario = await _usuarioRepository.GetById(prestamoInsertDto.IdUsuario);
 

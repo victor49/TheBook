@@ -1,4 +1,5 @@
-﻿using Thebook.DTOs;
+﻿using AutoMapper;
+using Thebook.DTOs;
 using Thebook.Exceptions;
 using Thebook.Models;
 using Thebook.Repository;
@@ -9,11 +10,13 @@ namespace Thebook.Services
     {
         private readonly IPrestamoRepository _prestamoRepository;
         private readonly ILibroRepository _libroRepository;
+        private readonly IMapper _mapper;
 
-        public ReportesService(IPrestamoRepository prestamoRepository, ILibroRepository libroRepository)
+        public ReportesService(IPrestamoRepository prestamoRepository, ILibroRepository libroRepository, IMapper mapper)
         {
             _prestamoRepository = prestamoRepository;
             _libroRepository = libroRepository;
+            _mapper = mapper;
         }       
 
         public async Task<IEnumerable<PrestamoGetDto>> GetPrestamosActivos()
@@ -62,15 +65,7 @@ namespace Thebook.Services
 
             if (libro  != null)
             {
-                var libroDto = new LibroGetDto
-                {
-                    IdLibro = libro.IdLibro,
-                    Titulo = libro.Titulo,
-                    Autor = libro.Autor,
-                    Editorial = libro.Editorial,
-                    Categoria = libro.Categoria,
-                    CantidadDisponible = libro.CantidadDisponible
-                };
+                var libroDto = _mapper.Map<LibroGetDto>(libro);
                 return libroDto;
             }
             return null;
@@ -79,15 +74,7 @@ namespace Thebook.Services
         {
             var librosNoDisponibles = await _libroRepository.GetLibrosNoDisponibles();
 
-            return librosNoDisponibles.Select(l => new LibroGetDto
-            {
-                IdLibro = l.IdLibro,
-                Titulo = l.Titulo,
-                Autor = l.Autor,
-                Editorial = l.Editorial,
-                Categoria = l.Categoria,
-                CantidadDisponible = l.CantidadDisponible
-            });                                                 
+            return librosNoDisponibles.Select(l => _mapper.Map<LibroGetDto>(l));                                                 
         }
     }
 }

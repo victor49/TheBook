@@ -1,4 +1,5 @@
-﻿using Thebook.DTOs;
+﻿using AutoMapper;
+using Thebook.DTOs;
 using Thebook.Models;
 using Thebook.Repository;
 
@@ -7,25 +8,19 @@ namespace Thebook.Services
     public class LibroService : ILibroService
     {
         private readonly ILibroRepository _libroRepository;
+        private readonly IMapper _mapper;
 
-        public LibroService(ILibroRepository libroRepository)
+        public LibroService(ILibroRepository libroRepository, IMapper mapper)
         {
             _libroRepository = libroRepository;
+            _mapper = mapper;
         }        
 
         public async Task<IEnumerable<LibroGetDto>> Get()
         {
             var libros = await _libroRepository.Get();
 
-            return libros.Select(l => new LibroGetDto
-            {
-                IdLibro = l.IdLibro,
-                Titulo = l.Titulo,
-                Autor = l.Autor,
-                Editorial = l.Editorial,
-                Categoria = l.Categoria,
-                CantidadDisponible = l.CantidadDisponible
-            });
+            return libros.Select(l => _mapper.Map<LibroGetDto>(l));
         }
 
         public async Task<LibroGetDto> GetByTitulo(string titulo)
@@ -34,15 +29,7 @@ namespace Thebook.Services
 
             if (libro != null)
             {
-                var libroDto = new LibroGetDto
-                {
-                    IdLibro = libro.IdLibro,
-                    Titulo = libro.Titulo,
-                    Autor = libro.Autor,
-                    Editorial = libro.Editorial,
-                    Categoria = libro.Categoria,
-                    CantidadDisponible = libro.CantidadDisponible
-                };
+                var libroDto = _mapper.Map<LibroGetDto>(libro);
                 return libroDto;
             }
             return null;
@@ -50,27 +37,12 @@ namespace Thebook.Services
 
         public async Task<LibroGetDto> Add(LibroInsertDto libroInsertDto)
         {
-            var libro = new Libro()
-            {
-                Titulo = libroInsertDto.Titulo,
-                Autor = libroInsertDto.Autor,
-                Editorial = libroInsertDto.Editorial,
-                Categoria= libroInsertDto.Categoria,
-                CantidadDisponible = libroInsertDto.CantidadDisponible
-            };
+            var libro = _mapper.Map<Libro>(libroInsertDto);
 
             await _libroRepository.Add(libro);
             await _libroRepository.Save();
 
-            var tareaDto = new LibroGetDto
-            {
-                IdLibro = libro.IdLibro,
-                Titulo = libro.Titulo,
-                Autor = libro.Autor,
-                Editorial = libro.Editorial,
-                Categoria = libro.Categoria,
-                CantidadDisponible = libro.CantidadDisponible
-            };
+            var tareaDto = _mapper.Map<LibroGetDto>(libro);
             return tareaDto;
         }
 
@@ -80,24 +52,12 @@ namespace Thebook.Services
 
             if (libro !=  null)
             {
-                libro.Titulo = libroUpdateDto.Titulo;
-                libro.Autor = libroUpdateDto.Autor;
-                libro.Editorial = libroUpdateDto.Editorial;
-                libro.Categoria = libroUpdateDto.Categoria;
-                libro.CantidadDisponible = libroUpdateDto.CantidadDisponible;
+                libro = _mapper.Map(libroUpdateDto, libro);
 
                 _libroRepository.Update(libro);
                 await _libroRepository.Save();
 
-                var libroDto = new LibroGetDto
-                {
-                    IdLibro = libro.IdLibro,
-                    Titulo = libro.Titulo,
-                    Autor = libro.Autor,
-                    Editorial = libro.Editorial,
-                    Categoria = libro.Categoria,
-                    CantidadDisponible = libro.CantidadDisponible
-                };
+                var libroDto = _mapper.Map<LibroGetDto>(libro);
                 return libroDto;
             }
             return null;
@@ -109,15 +69,7 @@ namespace Thebook.Services
 
             if (libro != null)
             {
-                var libroDto = new LibroGetDto
-                {
-                    IdLibro = libro.IdLibro,
-                    Titulo = libro.Titulo,
-                    Autor = libro.Autor,
-                    Editorial = libro.Editorial,
-                    Categoria = libro.Categoria,
-                    CantidadDisponible = libro.CantidadDisponible
-                };
+                var libroDto = _mapper.Map<LibroGetDto>(libro);
 
                 _libroRepository.Delete(libro);
                 await _libroRepository.Save();

@@ -10,7 +10,5 @@ namespace Thebook.DTOs
         public string Editorial { get; set; }
         public string Categoria { get; set; }
         public int CantidadDisponible { get; set; }
-
-        public ICollection<Prestamo> Prestamos { get; set; }
     }
 }

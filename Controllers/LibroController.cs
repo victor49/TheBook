@@ -32,8 +32,8 @@ namespace Thebook.Controllers
         [HttpPost]
         public async Task<ActionResult<LibroGetDto>> Add(LibroInsertDto libroInsertDto)
         {
-            await _libroService.Add(libroInsertDto);
-            return Ok();
+            var libroDto =await _libroService.Add(libroInsertDto);
+            return libroDto == null ? NotFound() : Ok(libroInsertDto);
         }
 
         [HttpPut("{titulo}")]

@@ -32,9 +32,9 @@ namespace Thebook.Controllers
         [HttpPost]
         public async Task<ActionResult<UsuarioGetDto>> Add(UsuarioInsertDto usuarioInsertDto)
         {
-            var usarioDtos = await _usuarioService.Add(usuarioInsertDto);
+            var usuarioDto = await _usuarioService.Add(usuarioInsertDto);
 
-            return usuarioInsertDto == null ? NotFound() : Ok(usuarioInsertDto);
+            return usuarioDto == null ? NotFound() : Ok(usuarioDto);
         }
 
         [HttpPut("{id}")]
