@@ -1,11 +1,14 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Thebook.AutoMappers;
+using Thebook.DTOs;
 using Thebook.Models;
 using Thebook.Repository;
 using Thebook.Services;
+using Thebook.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +39,10 @@ builder.Services.AddScoped<IReportesService, ReportesService>();
 
 //Mappers
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
+
+//Validaciones 
+builder.Services.AddScoped<IValidator<EmpleadoInsertDto>, EmpleadoInsertValidator>();
+builder.Services.AddScoped<IValidator<EmpleadoUpdateDto>,  EmpleadoUpdateValidator>();
 
 //jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Thebook.DTOs;
+using Thebook.Exceptions;
 using Thebook.Models;
 using Thebook.Repository;
 
@@ -19,12 +20,15 @@ namespace Thebook.Services
         public async Task<EmpleadoGetDto> GetById(int id)
         {
             var empleado = await _empeadoRepository.GetById(id);
-            if (empleado != null)
+
+            if (empleado == null)
+                throw new NotFoundException("El usuario no existe");
+            
+            else       
             {
                 var empleadoDto = _mapper.Map<EmpleadoGetDto>(empleado);
                 return empleadoDto;
             }
-            return null;
         }
 
         public async Task<EmpleadoGetDto> Add(EmpleadoInsertDto empleadoInsertDto)
@@ -40,8 +44,11 @@ namespace Thebook.Services
         public async Task<EmpleadoGetDto> Update(int id, EmpleadoUpdateDto empleadoUpdateDto)
         {
             var empleado = await _empeadoRepository.GetById(id);
+            
+            if (empleado == null)
+                throw new NotFoundException("El usuario no existe");
 
-            if(empleado != null)
+            else
             {
                 empleado = _mapper.Map(empleadoUpdateDto, empleado);
 
@@ -50,15 +57,17 @@ namespace Thebook.Services
 
                 var empleadoDto = _mapper.Map<EmpleadoGetDto>(empleado);
                 return empleadoDto;
-            }
-            return null;
+            }      
         }
 
         public async Task<EmpleadoGetDto> Delete(int id)
         {
             var empleado = await _empeadoRepository.GetById(id);
 
-            if (empleado != null)
+            if (empleado == null)
+                throw new NotFoundException("El usuario no existe");
+
+            else
             {
                 var empleadoDto = _mapper.Map<EmpleadoGetDto>(empleado);
                 _empeadoRepository.Delete(empleado);
@@ -66,7 +75,6 @@ namespace Thebook.Services
 
                 return empleadoDto;
             }
-            return null;
         }                
     }
 }
