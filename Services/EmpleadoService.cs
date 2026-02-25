@@ -11,6 +11,8 @@ namespace Thebook.Services
         private readonly IEmpeadoRepository _empeadoRepository;
         private readonly IMapper _mapper;
 
+        private static string nombreModelo = "Empleado";
+
         public EmpleadoService(IEmpeadoRepository empeadoRepository, IMapper mapper)
         {
             _empeadoRepository = empeadoRepository;
@@ -22,7 +24,7 @@ namespace Thebook.Services
             var empleado = await _empeadoRepository.GetById(id);
 
             if (empleado == null)
-                throw new NotFoundException("El usuario no existe");
+                throw new NotFoundException(nombreModelo, id);
             
             else       
             {
@@ -46,7 +48,7 @@ namespace Thebook.Services
             var empleado = await _empeadoRepository.GetById(id);
             
             if (empleado == null)
-                throw new NotFoundException("El usuario no existe");
+                throw new NotFoundException(nombreModelo, id);
 
             else
             {
@@ -65,7 +67,7 @@ namespace Thebook.Services
             var empleado = await _empeadoRepository.GetById(id);
 
             if (empleado == null)
-                throw new NotFoundException("El usuario no existe");
+                throw new NotFoundException(nombreModelo, id);
 
             else
             {

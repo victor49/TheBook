@@ -43,6 +43,8 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
 //Validaciones 
 builder.Services.AddScoped<IValidator<EmpleadoInsertDto>, EmpleadoInsertValidator>();
 builder.Services.AddScoped<IValidator<EmpleadoUpdateDto>,  EmpleadoUpdateValidator>();
+builder.Services.AddScoped<IValidator<LibroInsertDto>, LibroInsertValidator>();
+builder.Services.AddScoped<IValidator<LibroUpdateDto>, LibroUpdateValidator>();
 
 //jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

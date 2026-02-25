@@ -7,7 +7,7 @@ using Thebook.Services;
 
 namespace Thebook.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class EmpleadoController : ControllerBase
@@ -46,15 +46,9 @@ namespace Thebook.Controllers
             if (!validacionEmpleado.IsValid)
                 return BadRequest(validacionEmpleado.Errors);
 
-            try
-            {
-                var empleadoDto = await _empleadoService.Add(empleadoInsertDto);
-                return Ok(empleadoDto);
-            }
-            catch (NotFoundException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            
+            var empleadoDto = await _empleadoService.Add(empleadoInsertDto);
+            return empleadoDto == null ? NotFound() : Ok(empleadoDto);
                                   
         }
 

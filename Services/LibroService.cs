@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Thebook.DTOs;
+using Thebook.Exceptions;
 using Thebook.Models;
 using Thebook.Repository;
 
@@ -10,6 +11,7 @@ namespace Thebook.Services
         private readonly ILibroRepository _libroRepository;
         private readonly IMapper _mapper;
 
+        private static string nombreModelo = "Libro";
         public LibroService(ILibroRepository libroRepository, IMapper mapper)
         {
             _libroRepository = libroRepository;
@@ -27,12 +29,14 @@ namespace Thebook.Services
         {
             var libro = await _libroRepository.GetByTitle(titulo);
 
-            if (libro != null)
+            if (libro == null)
+                throw new NotFoundException(titulo);
+
+            else
             {
                 var libroDto = _mapper.Map<LibroGetDto>(libro);
                 return libroDto;
             }
-            return null;
         }
 
         public async Task<LibroGetDto> Add(LibroInsertDto libroInsertDto)
@@ -50,7 +54,10 @@ namespace Thebook.Services
         {
             var libro = await _libroRepository.GetByTitle(Titulo);
 
-            if (libro !=  null)
+            if (libro == null)
+                throw new NotFoundException(Titulo);
+
+            else
             {
                 libro = _mapper.Map(libroUpdateDto, libro);
 
@@ -60,14 +67,16 @@ namespace Thebook.Services
                 var libroDto = _mapper.Map<LibroGetDto>(libro);
                 return libroDto;
             }
-            return null;
         }
 
         public async Task<LibroGetDto> Delete(string titulo)
         {
             var libro = await _libroRepository.GetByTitle(titulo);
 
-            if (libro != null)
+            if (libro == null) 
+                throw new NotFoundException(titulo);
+
+            else
             {
                 var libroDto = _mapper.Map<LibroGetDto>(libro);
 
@@ -76,14 +85,16 @@ namespace Thebook.Services
 
                 return libroDto;
             }
-            return null;
         }
 
         public async Task UpdateCantidaLibroDisminuir(int id)
         {
             var libro = await _libroRepository.GetById(id);
+            
+            if (libro == null)
+                throw new NotFoundException(nombreModelo, id);
 
-            if (libro != null)
+            else
             {
                 libro.CantidadDisponible--;
 
@@ -96,7 +107,10 @@ namespace Thebook.Services
         {
             var libro = await _libroRepository.GetById(id);
 
-            if(libro != null)
+            if (libro == null)
+                throw new NotFoundException(nombreModelo, id);
+
+            else
             {
                 libro.CantidadDisponible++;
                 _libroRepository.Update(libro);

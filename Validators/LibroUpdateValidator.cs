@@ -3,9 +3,9 @@ using Thebook.DTOs;
 
 namespace Thebook.Validators
 {
-    public class LibroInsertValidator : AbstractValidator<LibroInsertDto>
+    public class LibroUpdateValidator : AbstractValidator<LibroUpdateDto>
     {
-        public LibroInsertValidator() 
+        public LibroUpdateValidator() 
         {
             RuleFor(l => l.Titulo).NotEmpty().WithMessage("El {PropertyName} es obligatorio")
                                   .MinimumLength(5).WithMessage("El {PropertyName} debe tener almenos 5 catacteres");
