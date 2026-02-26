@@ -47,6 +47,7 @@ builder.Services.AddScoped<IValidator<LibroInsertDto>, LibroInsertValidator>();
 builder.Services.AddScoped<IValidator<LibroUpdateDto>, LibroUpdateValidator>();
 builder.Services.AddScoped<IValidator<UsuarioInsertDto>, UsuarioInsertValidator>();
 builder.Services.AddScoped<IValidator<UsuarioUpdateDto>, UsuarioUpdateValidator>();
+builder.Services.AddScoped<IValidator<PrestamoInsertDto>, PrestamoInsertValidator>();
 
 //jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

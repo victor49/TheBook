@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thebook.DTOs;
 using Thebook.Exceptions;
@@ -14,16 +15,23 @@ namespace Thebook.Controllers
     {
         private readonly IPrestamoService _prestamoService;
         private readonly IDevolucionService _devolucionService;
+        private readonly IValidator<PrestamoInsertDto> _prestamoInsertValidator;
 
-        public PrestamosDevolucionesController(IPrestamoService prestamoService, IDevolucionService devolucionService)
+        public PrestamosDevolucionesController(IPrestamoService prestamoService, IDevolucionService devolucionService,
+                                               IValidator<PrestamoInsertDto> prestamoInsertValidator)
         {
             _prestamoService = prestamoService;
             _devolucionService = devolucionService;
+            _prestamoInsertValidator = prestamoInsertValidator;
         }
 
         [HttpPost]
         public async Task<ActionResult<PrestamoGetDto>> Add(PrestamoInsertDto prestamoInsertDto)
         {
+            var validarPrestamo = await _prestamoInsertValidator.ValidateAsync(prestamoInsertDto);
+            if (!validarPrestamo.IsValid)
+                return BadRequest(validarPrestamo.Errors);
+
             try
             {
                 var prestamoDto = await _prestamoService.Add(prestamoInsertDto);

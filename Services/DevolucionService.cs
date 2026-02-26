@@ -25,7 +25,7 @@ namespace Thebook.Services
             var prestamo = await _devolucionRepository.GetById(id);
 
             if (prestamo == null)
-                throw new BusinessException("Prestamo no existe");            
+                throw new NotFoundException("Prestamo", id);
 
             else
             {

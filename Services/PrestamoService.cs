@@ -34,13 +34,13 @@ namespace Thebook.Services
             var prestamosActivos = await _prestamoRepository.CountPrestamosActivosByUsuario(prestamoInsertDto.IdUsuario);
 
             if (libro == null)
-                throw new BusinessException("Libro no Existe");
+                throw new NotFoundException("Libro", prestamoInsertDto.IdLibro);
 
             else if (libro.CantidadDisponible == 0)
                 throw new BusinessException("No hay libros diponibles");
 
             else if (usuario == null)
-                throw new BusinessException("Usuario no existe");
+                throw new NotFoundException("Usurio", prestamoInsertDto.IdUsuario);
 
             else if (prestamosActivos >= 3)
                 throw new BusinessException("El usuario ya tiene el máximo de 3 libros prestados");
@@ -48,7 +48,8 @@ namespace Thebook.Services
             else
             {
                 var prestamo = _mapper.Map<Prestamo>(prestamoInsertDto);
-                
+
+                //Agregar fehca del prestamo
                 prestamo.FechaPrestamo = DateOnly.FromDateTime(DateTime.Now);
 
                 await _prestamoRepository.Add(prestamo);

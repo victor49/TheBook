@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thebook.DTOs;
-using Thebook.Models;
 using Thebook.Services;
 
 namespace Thebook.Controllers
