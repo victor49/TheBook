@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Thebook.DTOs;
+using Thebook.Exceptions;
 using Thebook.Models;
 using Thebook.Repository;
 
@@ -9,6 +10,8 @@ namespace Thebook.Services
     {
         private readonly IUsuarioRepository _repository;
         private readonly IMapper _mapper;
+
+        private static string nombreModelo = "Usuario";
 
         public UsuarioService(IUsuarioRepository repository, IMapper mapper)
         {
@@ -27,12 +30,14 @@ namespace Thebook.Services
         {
             var usuario = await _repository.GetById(id);
 
-            if (usuario != null)
+            if (usuario == null)
+                throw new NotFoundException(nombreModelo, id);
+
+            else
             {
                 var usuariDto = _mapper.Map<UsuarioGetDto>(usuario);
                 return usuariDto;
             }
-            return null;
         }
 
         public async Task<UsuarioGetDto> Add(UsuarioInsertDto usuarioInsertDto)
@@ -50,7 +55,10 @@ namespace Thebook.Services
         {
             var usuario = await _repository.GetById(id);
 
-            if (usuario != null)
+            if (usuario == null)
+                throw new NotFoundException(nombreModelo, id);
+
+            else
             {
                 usuario = _mapper.Map(usuarioUpdateDto, usuario);
 
@@ -60,7 +68,6 @@ namespace Thebook.Services
                 var usuarioDto = _mapper.Map<UsuarioGetDto>(usuario);
                 return usuarioDto;
             }
-            return null;                                  
         }
     }
 }

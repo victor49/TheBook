@@ -1,20 +1,27 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thebook.DTOs;
+using Thebook.Exceptions;
 using Thebook.Services;
 
 namespace Thebook.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    //[Authorize(Roles ="Admin")]
     [ApiController]
     [Route("[controller]")]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly IValidator<UsuarioInsertDto> _usuarioInsertValidator;
+        private readonly IValidator<UsuarioUpdateDto> _usuarioUpdateValidator;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, IValidator<UsuarioInsertDto> usuarioInsertValidator,
+                                 IValidator<UsuarioUpdateDto> usuarioUpdateValidator)
         {
             _usuarioService = usuarioService;
+            _usuarioInsertValidator = usuarioInsertValidator;
+            _usuarioUpdateValidator = usuarioUpdateValidator;
         }
 
         [HttpGet]
@@ -24,25 +31,44 @@ namespace Thebook.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UsuarioGetDto>> GetById(int id)
         {
-            var usuarioDto = await _usuarioService.GetById(id);
-
-            return usuarioDto == null ? NotFound() : Ok(usuarioDto);
+            try
+            {
+                var usuarioDto = await _usuarioService.GetById(id);
+                return usuarioDto;
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(new {error =ex.Message});
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<UsuarioGetDto>> Add(UsuarioInsertDto usuarioInsertDto)
         {
-            var usuarioDto = await _usuarioService.Add(usuarioInsertDto);
+            var validarUsuario = await _usuarioInsertValidator.ValidateAsync(usuarioInsertDto);
+            if (!validarUsuario.IsValid)
+                return BadRequest(validarUsuario.Errors);
 
+            var usuarioDto = await _usuarioService.Add(usuarioInsertDto);
             return usuarioDto == null ? NotFound() : Ok(usuarioDto);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<UsuarioGetDto>> Update(int id, UsuarioUpdateDto usuarioUpdateDto)
         {
-            var usuaroDto = await _usuarioService.Update(id, usuarioUpdateDto);
+            var validarUsuario = await _usuarioUpdateValidator.ValidateAsync(usuarioUpdateDto);
+            if (!validarUsuario.IsValid)
+                return BadRequest(validarUsuario.Errors);
 
-            return usuaroDto == null ? NotFound() : Ok(usuaroDto);
+            try
+            {
+                var usuaroDto = await _usuarioService.Update(id, usuarioUpdateDto);
+                return Ok(usuaroDto);
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(new {error = ex.Message});
+            }
         }
 
     }

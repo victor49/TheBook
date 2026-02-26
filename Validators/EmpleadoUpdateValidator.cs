@@ -7,11 +7,11 @@ namespace Thebook.Validators
     {
         public EmpleadoUpdateValidator() 
         {
-            RuleFor(e => e.Email).NotEmpty().WithMessage("El Email es obligatorio")
+            RuleFor(e => e.Email).NotEmpty().WithMessage("El {PropertyName} es obligatorio")
                                  .EmailAddress().WithMessage("El formato del correo no es valido");
-            RuleFor(e => e.Password).NotEmpty().WithMessage("La contraseña es obligatoria")
+            RuleFor(e => e.Password).NotEmpty().WithMessage("La {PropertyName} es obligatoria")
                                     .MinimumLength(8).WithMessage("Debe tener almemos 8 caracteres");
-            RuleFor(e => e.Rol).NotEmpty().WithMessage("El ron es obligatorio");
+            RuleFor(e => e.Rol).NotEmpty().WithMessage("El {PropertyName} es obligatorio");
         }
     }
 }
