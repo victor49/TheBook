@@ -17,8 +17,6 @@ namespace Thebook.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(EmpleadoDto empleado)
         {
-            //var empleadoDto = await _loginService.GetEmpleado(empleado.Email, empleado.Password);            
-            
             string token = await _loginService.GetEmpleado(empleado.Email, empleado.Password);
 
             if (token == null)

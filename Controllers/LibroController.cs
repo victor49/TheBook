@@ -39,7 +39,7 @@ namespace Thebook.Controllers
 
             catch (NotFoundException ex)
             {
-                return BadRequest(new {error = ex.Message});
+                return NotFound(new {error = ex.Message});
             }
         }
 
@@ -68,7 +68,7 @@ namespace Thebook.Controllers
             }
             catch (NotFoundException ex)
             {
-                return BadRequest(new {error = ex.Message});
+                return NotFound(new {error = ex.Message});
             }
         }
 
@@ -82,7 +82,7 @@ namespace Thebook.Controllers
             }
             catch (NotFoundException ex) 
             {
-                return BadRequest(new {error = ex.Message});
+                return NotFound(new {error = ex.Message});
             }
         }
     }
