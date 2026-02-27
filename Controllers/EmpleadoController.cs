@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thebook.DTOs;
-using Thebook.Exceptions;
 using Thebook.Services;
 
 namespace Thebook.Controllers
@@ -27,29 +26,19 @@ namespace Thebook.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<EmpleadoGetDto>> GetById(int id)
         {
-            try
-            {
-                var empleadoDto = await _empleadoService.GetById(id);
-                return Ok(empleadoDto);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new{error = ex.Message });
-            }
+            var empleadoDto = await _empleadoService.GetById(id);
+            return Ok(empleadoDto);            
         }
 
         [HttpPost]
         public async Task<ActionResult<EmpleadoDto>> Add(EmpleadoInsertDto empleadoInsertDto)
         {
-
             var validacionEmpleado = await _empleadoInsertValidator.ValidateAsync(empleadoInsertDto);
             if (!validacionEmpleado.IsValid)
                 return BadRequest(validacionEmpleado.Errors);
 
-            
             var empleadoDto = await _empleadoService.Add(empleadoInsertDto);
-            return empleadoDto == null ? NotFound() : Ok(empleadoDto);
-                                  
+            return empleadoDto == null ? NotFound() : Ok(empleadoDto);                                  
         }
 
         [HttpPut("{id}")]
@@ -58,30 +47,16 @@ namespace Thebook.Controllers
             var validacionEmpleado = await _empleadoUpdateValidator.ValidateAsync(empleadoUpdateDto);
             if (!validacionEmpleado.IsValid)
                 return BadRequest(validacionEmpleado.Errors);
-
-            try
-            {
-                var empleadoDto = await _empleadoService.Update(id, empleadoUpdateDto);
-                return Ok(empleadoDto);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new {error = ex.Message});
-            }
+           
+            var empleadoDto = await _empleadoService.Update(id, empleadoUpdateDto);
+            return Ok(empleadoDto);           
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<EmpleadoDto>> Delete(int id)
-        {
-            try
-            {
-                var empleadoDto = await _empleadoService.Delete(id);
-                return Ok(empleadoDto);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new {error =ex.Message});
-            }
+        {        
+            var empleadoDto = await _empleadoService.Delete(id);
+            return Ok(empleadoDto);            
         }
     }
 }

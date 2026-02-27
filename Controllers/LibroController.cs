@@ -7,7 +7,7 @@ using Thebook.Services;
 
 namespace Thebook.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class LibroController : ControllerBase
@@ -31,16 +31,8 @@ namespace Thebook.Controllers
         [HttpGet("{titulo}")]
         public async Task<ActionResult<LibroGetDto>> GetByTitulo(string titulo)
         {
-            try
-            {
-                var libroDto = await _libroService.GetByTitulo(titulo);
-                return Ok(libroDto);
-            }
-
-            catch (NotFoundException ex)
-            {
-                return NotFound(new {error = ex.Message});
-            }
+            var libroDto = await _libroService.GetByTitulo(titulo);
+            return Ok(libroDto);
         }
 
         [HttpPost]
@@ -51,7 +43,7 @@ namespace Thebook.Controllers
                 return BadRequest(validarLibro.Errors);
 
             var libroDto =await _libroService.Add(libroInsertDto);
-            return libroDto == null ? NotFound() : Ok(libroInsertDto);
+            return libroDto == null ? NotFound() : Ok(libroDto);
         }
 
         [HttpPut("{titulo}")]
@@ -61,29 +53,15 @@ namespace Thebook.Controllers
             if (!validarLibro.IsValid)
                 return BadRequest(validarLibro.Errors);
 
-            try
-            {
-                var libroDto = await _libroService.Update(titulo, libroUpdateDto);
-                return Ok(libroDto);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new {error = ex.Message});
-            }
+            var libroDto = await _libroService.Update(titulo, libroUpdateDto);
+            return Ok(libroDto);
         }
 
         [HttpDelete("{titulo}")]
         public async Task<ActionResult<LibroGetDto>> Delete(string titulo)
         {
-            try
-            {
-                var libroDto = await _libroService.Delete(titulo);
-                return Ok(libroDto);
-            }
-            catch (NotFoundException ex) 
-            {
-                return NotFound(new {error = ex.Message});
-            }
+            var libroDto = await _libroService.Delete(titulo);
+            return Ok(libroDto);
         }
     }
 }

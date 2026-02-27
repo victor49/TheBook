@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thebook.DTOs;
-using Thebook.Exceptions;
-using Thebook.Repository;
 using Thebook.Services;
 
 namespace Thebook.Controllers
@@ -32,35 +30,20 @@ namespace Thebook.Controllers
             if (!validarPrestamo.IsValid)
                 return BadRequest(validarPrestamo.Errors);
 
-            try
-            {
-                var prestamoDto = await _prestamoService.Add(prestamoInsertDto);
-                return Ok(prestamoDto);
-            }
-            catch (BusinessException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }                        
+            var prestamoDto = await _prestamoService.Add(prestamoInsertDto);
+            return Ok(prestamoDto);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<PrestamoGetDto>> Devolucion(int id)
         {
-            try
-            {
-                var devolucion = await _devolucionService.UpdateDevolucion(id);
+            var devolucion = await _devolucionService.UpdateDevolucion(id);
 
-                if (!devolucion.Success)
-                    return BadRequest(devolucion.Error);
+            if (!devolucion.Success)
+                return BadRequest(devolucion.Error);
 
-                return Ok(devolucion);
-            }
-            catch (BusinessException ex)
-            {
-                
-                return BadRequest(new { error = ex.Message });                
-            }
-        }
+            return Ok(devolucion);
+        }   
 
     }
 }

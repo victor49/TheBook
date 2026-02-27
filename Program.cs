@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Thebook.AutoMappers;
 using Thebook.DTOs;
+using Thebook.Middlewares;
 using Thebook.Models;
 using Thebook.Repository;
 using Thebook.Services;
@@ -75,13 +76,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Middleware para Excepsiones
+app.UseMiddleware<ExceptionMiddleware>();
+
 //jwt
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

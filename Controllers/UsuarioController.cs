@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thebook.DTOs;
-using Thebook.Exceptions;
 using Thebook.Services;
 
 namespace Thebook.Controllers
@@ -31,15 +30,9 @@ namespace Thebook.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UsuarioGetDto>> GetById(int id)
         {
-            try
-            {
-                var usuarioDto = await _usuarioService.GetById(id);
-                return usuarioDto;
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new {error =ex.Message});
-            }
+           
+            var usuarioDto = await _usuarioService.GetById(id);
+            return usuarioDto;
         }
 
         [HttpPost]
@@ -59,17 +52,10 @@ namespace Thebook.Controllers
             var validarUsuario = await _usuarioUpdateValidator.ValidateAsync(usuarioUpdateDto);
             if (!validarUsuario.IsValid)
                 return BadRequest(validarUsuario.Errors);
-
-            try
-            {
-                var usuaroDto = await _usuarioService.Update(id, usuarioUpdateDto);
-                return Ok(usuaroDto);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new {error = ex.Message});
-            }
-        }
+            
+            var usuaroDto = await _usuarioService.Update(id, usuarioUpdateDto);
+            return Ok(usuaroDto);
+    }
 
     }
 }
