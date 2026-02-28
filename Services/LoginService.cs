@@ -22,6 +22,7 @@ namespace Thebook.Services
         public async Task<string> GetEmpleado(string email, string password)
         {
             var empleado = await _loginRepository.GetEmpleado(email);
+
             if (empleado == null || !BCrypt.Net.BCrypt.Verify(password, empleado.Password))
             {
                 return null;

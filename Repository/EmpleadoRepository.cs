@@ -4,7 +4,7 @@ using Thebook.Repository;
 
 namespace Thebook.Services
 {
-    public class EmpleadoRepository : IEmpeadoRepository
+    public class EmpleadoRepository : IEmpleadoRepository
     {
         private readonly TheBookContext _context;
         public EmpleadoRepository(TheBookContext context)

@@ -28,7 +28,7 @@ builder.Services.AddDbContext<TheBookContext>(options =>
 //Inyeccion de dependencias Repositorys y Services
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<IEmpeadoRepository, EmpleadoRepository>();
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
 builder.Services.AddScoped<IEmpleadoService, EmpleadoService>();
 builder.Services.AddScoped<ILibroRepository, LibroRepository>();
 builder.Services.AddScoped<ILibroService, LibroService>();

@@ -8,12 +8,12 @@ namespace Thebook.Services
 {
     public class EmpleadoService: IEmpleadoService
     {
-        private readonly IEmpeadoRepository _empeadoRepository;
+        private readonly IEmpleadoRepository _empeadoRepository;
         private readonly IMapper _mapper;
 
         private static string nombreModelo = "Empleado";
 
-        public EmpleadoService(IEmpeadoRepository empeadoRepository, IMapper mapper)
+        public EmpleadoService(IEmpleadoRepository empeadoRepository, IMapper mapper)
         {
             _empeadoRepository = empeadoRepository;
             _mapper = mapper;

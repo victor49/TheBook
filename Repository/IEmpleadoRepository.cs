@@ -2,7 +2,7 @@
 
 namespace Thebook.Repository
 {
-    public interface IEmpeadoRepository
+    public interface IEmpleadoRepository
     {
         Task<Empleado> GetById(int id);
         Task Add(Empleado empleado);

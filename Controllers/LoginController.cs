@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Thebook.DTOs;
 using Thebook.Services;
 
@@ -14,15 +15,17 @@ namespace Thebook.Controllers
         {
             _loginService = loginService;
         }
-        [HttpGet]
-        public async Task<IActionResult> Get(EmpleadoDto empleado)
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto empleado)
         {
             string token = await _loginService.GetEmpleado(empleado.Email, empleado.Password);
 
             if (token == null)
-                return NotFound("Credenciales incorrectas");
+                return Unauthorized("Credenciales incorrectas");
 
-            return Ok(token);
+            return Ok(new{ token});
         }
     }
 }

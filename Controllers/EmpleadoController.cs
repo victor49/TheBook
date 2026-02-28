@@ -6,7 +6,7 @@ using Thebook.Services;
 
 namespace Thebook.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class EmpleadoController : ControllerBase
@@ -31,7 +31,7 @@ namespace Thebook.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<EmpleadoDto>> Add(EmpleadoInsertDto empleadoInsertDto)
+        public async Task<ActionResult<LoginRequestDto>> Add(EmpleadoInsertDto empleadoInsertDto)
         {
             var validacionEmpleado = await _empleadoInsertValidator.ValidateAsync(empleadoInsertDto);
             if (!validacionEmpleado.IsValid)
@@ -42,7 +42,7 @@ namespace Thebook.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<EmpleadoDto>> Update(int id, EmpleadoUpdateDto empleadoUpdateDto)
+        public async Task<ActionResult<LoginRequestDto>> Update(int id, EmpleadoUpdateDto empleadoUpdateDto)
         {
             var validacionEmpleado = await _empleadoUpdateValidator.ValidateAsync(empleadoUpdateDto);
             if (!validacionEmpleado.IsValid)
@@ -53,7 +53,7 @@ namespace Thebook.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<EmpleadoDto>> Delete(int id)
+        public async Task<ActionResult<LoginRequestDto>> Delete(int id)
         {        
             var empleadoDto = await _empleadoService.Delete(id);
             return Ok(empleadoDto);            
